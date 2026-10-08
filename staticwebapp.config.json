@@ -2,11 +2,13 @@
   "routes": [
     {
       "route": "/docs/*",
-      "statusCode": 404
+      "redirect": "/",
+      "statusCode": 302
     },
     {
       "route": "/README.md",
-      "statusCode": 404
+      "redirect": "/",
+      "statusCode": 302
     }
   ],
   "globalHeaders": {

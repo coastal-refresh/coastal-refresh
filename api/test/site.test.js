@@ -26,9 +26,12 @@ test("staticwebapp.config.json is valid and within the 20 KB platform limit", ()
 });
 
 test("config blocks internal files that would otherwise be public", () => {
-  const blocked = config.routes.filter((r) => r.statusCode === 404).map((r) => r.route);
+  // A route with only a statusCode still serves the file body (found on the Azure
+  // preview), so the rule must redirect away, which sends no file content.
+  const blocked = config.routes.filter((r) => r.redirect && !r.rewrite).map((r) => r.route);
   assert.ok(blocked.includes("/docs/*"));
   assert.ok(blocked.includes("/README.md"));
+  assert.ok(config.routes.every((r) => r.statusCode !== 404 || r.redirect), "statusCode-only rules do not hide content");
 });
 
 test("API runtime is pinned to a supported Node version", () => {

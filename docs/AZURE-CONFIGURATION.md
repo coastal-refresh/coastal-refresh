@@ -205,7 +205,7 @@ rejected before SendGrid); only step 1 does, and it is intended to.
    `staticwebapp.config.json`.)
 9. **Storage/tracking**: Application → Cookies / Local Storage empty; Network
    shows requests only to your own domain.
-10. **Docs not public**: `$SITE/docs/PRIVACY-POLICY-DRAFT.md` returns 404.
+10. **Docs not public**: `curl -s -D - $SITE/docs/PRIVACY-POLICY-DRAFT.md` returns a 302 redirect to `/` with **no file content** (check the body, not just the status code).
 11. **Desktop and phone**: load all three pages, open the mobile menu, submit
     the form from a phone.
 12. **Headers** (browser dev tools → Network → the page → Response headers, or
@@ -213,7 +213,7 @@ rejected before SendGrid); only step 1 does, and it is intended to.
     `Permissions-Policy` are present alongside the platform's HSTS; the console
     shows no "Refused to load…" CSP messages on any page or during a form
     submission.
-13. **Internal files**: `$SITE/README.md` returns 404 (it returned 200 on the
+13. **Internal files**: `$SITE/README.md` redirects to `/` with no file content (it returned 200 and the full file on the
     2026-08-24 build).
 
 ## 7. Compatibility notes
