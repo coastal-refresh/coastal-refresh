@@ -128,3 +128,21 @@ test("the form posts only to the same-origin API route", () => {
   assert.match(html, /<form[^>]*action="\/api\/submit-inquiry"[^>]*method="post"/i);
   assert.doesNotMatch(read("js/main.js"), /fetch\(\s*["']https?:/);
 });
+
+test("owner-approved disclosures are present on the pages that need them", () => {
+  const strip = (rel) => read(rel).replace(/<!--[\s\S]*?-->/g, "").replace(/\s+/g, " ");
+  const home = strip("index.html");
+  const portfolio = strip("portfolio.html");
+  assert.ok(portfolio.includes("The projects shown on this page are our own beach properties."));
+  // Shown once in the desktop view and once in the mobile text-card view.
+  const reviewLabel = "Reviews from guests of our own vacation rental condos, which we refreshed, furnished and decorated.";
+  assert.equal(portfolio.split(reviewLabel).length - 1, 2, "review label in both desktop and mobile views");
+  assert.ok(
+    home.includes("Rachel and Ian Wallace are family friends and have been our real estate agents on several transactions.")
+  );
+  assert.ok(
+    home.includes(
+      "Submitting an inquiry does not create a contract or guarantee service availability. Project details, scheduling, and pricing are subject to further discussion and agreement."
+    )
+  );
+});

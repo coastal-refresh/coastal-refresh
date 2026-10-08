@@ -434,6 +434,21 @@ p {
   color: var(--color-text-muted);
 }
 
+/* Short factual disclosure lines (own properties, testimonial relationship,
+   review source). Same muted color as other secondary text, which clears the
+   4.5:1 contrast minimum on the page background. */
+.page-note {
+  max-width: 720px;
+  margin: 1rem auto 0;
+  text-align: center;
+  font-size: 0.95rem;
+  color: var(--color-text-muted);
+}
+
+.reviews-note {
+  margin-bottom: 1.5rem;
+}
+
 .hero-tagline {
   display: flex;
   flex-wrap: wrap;
@@ -773,7 +788,8 @@ section {
 }
 
 @media (max-width: 720px) {
-  .reviews-image {
+  .reviews-image,
+  .reviews-note {
     display: none;
   }
 
