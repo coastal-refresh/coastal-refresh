@@ -445,10 +445,6 @@ p {
   color: var(--color-text-muted);
 }
 
-.reviews-note {
-  margin-bottom: 1.5rem;
-}
-
 .hero-tagline {
   display: flex;
   flex-wrap: wrap;
@@ -735,6 +731,22 @@ section {
    width and uncropped. */
 /* No fixed box - displays at natural size up to 700px wide. Recommended
    source size: roughly 1250x2000px (a tall, narrow stack of cards). */
+.reviews-figure {
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+/* Caption under the graphic: states what the reviews are, in plain readable
+   text (not part of the image), same width as the graphic. */
+.reviews-caption {
+  margin-top: 1rem;
+  font-size: 0.95rem;
+  line-height: 1.5;
+  text-align: center;
+  text-wrap: balance;
+  color: var(--color-text-muted);
+}
+
 .reviews-image {
   display: block;
   width: 100%;
@@ -788,8 +800,7 @@ section {
 }
 
 @media (max-width: 720px) {
-  .reviews-image,
-  .reviews-note {
+  .reviews-figure {
     display: none;
   }
 
