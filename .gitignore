@@ -4,3 +4,10 @@ Thumbs.db
 # Azure Functions API (local dev secrets and dependencies)
 api/local.settings.json
 api/node_modules/
+
+# Local environment files (never commit credentials)
+.env
+.env.*
+
+# Owner-only working notes (compliance audit, drafts). The repo and its GitHub Pages copy are public.
+private/

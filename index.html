@@ -9,15 +9,10 @@
       content="Going Coastal Refresh Co. helps Gulf Shores, Orange Beach and Fort Morgan property owners refresh and update their beach homes and condos without the expense and disruption of a full renovation."
     />
     <link rel="icon" type="image/webp" href="images/branding/favicon.webp" />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,600;0,700;1,600&family=Inter:wght@400;500;700&display=swap"
-      rel="stylesheet"
-    />
     <link rel="stylesheet" href="css/styles.css" />
   </head>
   <body>
+    <a class="skip-link" href="#main">Skip to main content</a>
     <!--
 SITE HEADER / NAVIGATION
 This block is repeated at the top of every page. To add or rename a menu
@@ -26,10 +21,18 @@ link, edit the <li><a> lines inside <nav class="main-nav">.
     <header class="site-header">
       <div class="container">
         <a href="index.html" class="site-logo">
-          <img src="images/branding/logo.webp" alt="Going Coastal Refresh Co. logo" />
+          <img src="images/branding/logo.webp" alt="Going Coastal Refresh Co. home" />
         </a>
-        <button class="nav-toggle" aria-label="Toggle menu" aria-expanded="false">&#9776;</button>
-        <nav class="main-nav">
+        <button
+          type="button"
+          class="nav-toggle"
+          aria-label="Toggle menu"
+          aria-expanded="false"
+          aria-controls="site-nav"
+        >
+          &#9776;
+        </button>
+        <nav class="main-nav" id="site-nav" aria-label="Main">
           <ul>
             <li><a href="index.html" aria-current="page">Home</a></li>
             <li><a href="portfolio.html">Portfolio</a></li>
@@ -40,6 +43,7 @@ link, edit the <li><a> lines inside <nav class="main-nav">.
       </div>
     </header>
 
+    <main id="main">
     <!--
 HOME PAGE HERO
 
@@ -180,6 +184,10 @@ fit a phone screen without shrinking its text to be unreadable.
         <div class="section-intro">
           <p class="eyebrow">Realtor Testimonial</p>
           <h2>What Our Favorite Gulf Shores Realtor Says</h2>
+          <p class="page-note">
+            Rachel and Ian Wallace are family friends and have been our real estate agents on
+            several transactions.
+          </p>
         </div>
 
         <!-- Shown on normal/desktop screens -->
@@ -191,6 +199,7 @@ fit a phone screen without shrinking its text to be unreadable.
               width="1536"
               height="1024"
             />
+            <span class="visually-hidden">(opens The Beach to Bay Group website in a new tab)</span>
           </a>
         </div>
 
@@ -202,6 +211,7 @@ fit a phone screen without shrinking its text to be unreadable.
                 src="images/general/testimonial-rachel-wallace-photo-mobile.webp"
                 alt="Rachel Wallace and Ian Wallace of The Beach to Bay Group, RE/MAX on the Coast"
               />
+              <span class="visually-hidden">(opens The Beach to Bay Group website in a new tab)</span>
             </a>
           </div>
           <div class="testimonial-content">
@@ -264,7 +274,14 @@ action/method are a working fallback for visitors without JavaScript.
               Call or Text: <a href="tel:+16307769537">(630) 776-9537</a>
             </p>
           </div>
+          <!--
+          Field limits here (name 80, email 254, message 2000) must match
+          MAX_LENGTHS in api/src/inquiry.js, which rejects anything longer.
+          The name pattern matches NAME_PATTERN there: any Unicode letter plus
+          spaces, hyphens, apostrophes and periods.
+          -->
           <form class="contact-form" action="/api/submit-inquiry" method="post">
+            <p class="form-required-note">Fields marked * are required.</p>
             <div class="form-row">
               <div>
                 <label for="first-name">First Name *</label>
@@ -273,8 +290,9 @@ action/method are a working fallback for visitors without JavaScript.
                   id="first-name"
                   name="firstName"
                   maxlength="80"
-                  pattern="[A-Za-zÀ-ÖØ-öø-ÿ' .-]+"
-                  title="Letters only, please."
+                  autocomplete="given-name"
+                  pattern="(?=.*\p{L})[\p{L}\p{M}' .’\-]+"
+                  title="Letters, spaces, hyphens, apostrophes and periods only."
                   required
                 />
               </div>
@@ -285,8 +303,9 @@ action/method are a working fallback for visitors without JavaScript.
                   id="last-name"
                   name="lastName"
                   maxlength="80"
-                  pattern="[A-Za-zÀ-ÖØ-öø-ÿ' .-]+"
-                  title="Letters only, please."
+                  autocomplete="family-name"
+                  pattern="(?=.*\p{L})[\p{L}\p{M}' .’\-]+"
+                  title="Letters, spaces, hyphens, apostrophes and periods only."
                   required
                 />
               </div>
@@ -294,7 +313,14 @@ action/method are a working fallback for visitors without JavaScript.
             <div class="form-row">
               <div>
                 <label for="email">Email Address *</label>
-                <input type="email" id="email" name="email" required />
+                <input
+                  type="email"
+                  id="email"
+                  name="email"
+                  maxlength="254"
+                  autocomplete="email"
+                  required
+                />
               </div>
               <div>
                 <label for="phone">Phone Number</label>
@@ -303,6 +329,7 @@ action/method are a working fallback for visitors without JavaScript.
                   id="phone"
                   name="phone"
                   placeholder="205-555-1234"
+                  autocomplete="tel-national"
                   pattern="\d{3}-\d{3}-\d{4}"
                   maxlength="12"
                   title="Enter a 10-digit US phone number, e.g. 205-555-1234"
@@ -311,18 +338,40 @@ action/method are a working fallback for visitors without JavaScript.
             </div>
             <div>
               <label for="message">Message *</label>
-              <textarea id="message" name="message" maxlength="500" required></textarea>
+              <textarea
+                id="message"
+                name="message"
+                maxlength="2000"
+                aria-describedby="message-hint"
+                required
+              ></textarea>
+              <p class="form-hint" id="message-hint">Up to 2,000 characters.</p>
+            </div>
+            <!--
+            Spam trap: people never see or tab to this field, so only bots
+            fill it in. The API silently drops any submission that has a
+            value here. Keep it out of the accessibility tree and tab order.
+            -->
+            <div class="form-trap" aria-hidden="true">
+              <label for="website">Leave this field empty</label>
+              <input type="text" id="website" name="website" tabindex="-1" autocomplete="off" />
             </div>
             <button type="submit" class="button">Submit Inquiry</button>
-            <p class="form-status" role="status" aria-live="polite"></p>
+            <p class="form-status" id="form-status" role="status" aria-live="polite"></p>
             <p class="form-note">
               Submitting this form sends your message directly to Going Coastal Refresh Co. If you
               run into any trouble, please email or call/text us directly using the details above.
+            </p>
+            <p class="form-note">
+              Submitting an inquiry does not create a contract or guarantee service availability.
+              Project details, scheduling, and pricing are subject to further discussion and
+              agreement.
             </p>
           </form>
         </div>
       </div>
     </section>
+    </main>
 
     <!--
 SITE FOOTER
@@ -335,7 +384,7 @@ edit them below.
         <span>Going Coastal Refresh Co.</span>
       </div>
       <p class="footer-locations">Gulf Shores, Orange Beach, Fort Morgan, Alabama</p>
-      <p class="footer-copyright">&copy; 2026 Going Coastal Refresh Co. All rights reserved.</p>
+      <p class="footer-copyright">&copy; 2026 Going Coastal Refresh Co., LLC. All rights reserved.</p>
     </footer>
 
     <script src="js/main.js"></script>

@@ -9,22 +9,25 @@
       content="See before-and-after photos of the beach homes and condos Going Coastal Refresh Co. has updated across Gulf Shores, Orange Beach and Fort Morgan, Alabama."
     />
     <link rel="icon" type="image/webp" href="images/branding/favicon.webp" />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,600;0,700;1,600&family=Inter:wght@400;500;700&display=swap"
-      rel="stylesheet"
-    />
     <link rel="stylesheet" href="css/styles.css" />
   </head>
   <body>
+    <a class="skip-link" href="#main">Skip to main content</a>
     <header class="site-header">
       <div class="container">
         <a href="index.html" class="site-logo">
-          <img src="images/branding/logo.webp" alt="Going Coastal Refresh Co. logo" />
+          <img src="images/branding/logo.webp" alt="Going Coastal Refresh Co. home" />
         </a>
-        <button class="nav-toggle" aria-label="Toggle menu" aria-expanded="false">&#9776;</button>
-        <nav class="main-nav">
+        <button
+          type="button"
+          class="nav-toggle"
+          aria-label="Toggle menu"
+          aria-expanded="false"
+          aria-controls="site-nav"
+        >
+          &#9776;
+        </button>
+        <nav class="main-nav" id="site-nav" aria-label="Main">
           <ul>
             <li><a href="index.html">Home</a></li>
             <li><a href="portfolio.html" aria-current="page">Portfolio</a></li>
@@ -35,6 +38,7 @@
       </div>
     </header>
 
+    <main id="main">
     <section class="hero">
       <div class="container">
         <h1>Our Portfolio</h1>
@@ -42,6 +46,7 @@
           A look at real refresh projects across Gulf Shores, Orange Beach and Fort Morgan &mdash;
           from single-room updates to full property makeovers.
         </p>
+        <p class="page-note">The projects shown on this page are our own beach properties.</p>
       </div>
     </section>
 
@@ -150,6 +155,10 @@ Image file: images/portfolio/guest-reviews.webp
     <section class="section-alt" id="reviews">
       <div class="container">
         <!-- Shown on normal/desktop screens -->
+        <p class="page-note reviews-note">
+          Reviews from guests of our own vacation rental condos, which we refreshed, furnished and
+          decorated.
+        </p>
         <img
           src="images/portfolio/guest-reviews.webp"
           class="reviews-image"
@@ -162,13 +171,16 @@ Image file: images/portfolio/guest-reviews.webp
             <p class="eyebrow">Guest Feedback</p>
             <h2>What Our Guests Are Saying</h2>
             <p class="text-muted">
-              Real reviews from guests who stayed in properties we refreshed, furnished and
-              decorated.
+              Reviews from guests of our own vacation rental condos, which we refreshed, furnished
+              and decorated.
             </p>
           </div>
           <div class="reviews-grid">
             <div class="review-card">
-              <p class="review-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</p>
+              <p class="review-stars">
+                <span aria-hidden="true">&#9733;&#9733;&#9733;&#9733;&#9733;</span>
+                <span class="visually-hidden">5 out of 5 stars</span>
+              </p>
               <p class="review-quote">
                 &ldquo;This is the most beautiful condo I've ever seen.&rdquo;
               </p>
@@ -178,7 +190,10 @@ Image file: images/portfolio/guest-reviews.webp
               <p class="review-author">&mdash; Dianna O.</p>
             </div>
             <div class="review-card">
-              <p class="review-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</p>
+              <p class="review-stars">
+                <span aria-hidden="true">&#9733;&#9733;&#9733;&#9733;&#9733;</span>
+                <span class="visually-hidden">5 out of 5 stars</span>
+              </p>
               <p class="review-quote">
                 &ldquo;My favorite property in 12 years of coming to Gulf Shores.&rdquo;
               </p>
@@ -188,7 +203,10 @@ Image file: images/portfolio/guest-reviews.webp
               <p class="review-author">&mdash; Chris C.</p>
             </div>
             <div class="review-card">
-              <p class="review-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</p>
+              <p class="review-stars">
+                <span aria-hidden="true">&#9733;&#9733;&#9733;&#9733;&#9733;</span>
+                <span class="visually-hidden">5 out of 5 stars</span>
+              </p>
               <p class="review-quote">
                 &ldquo;I walked into this amazing condo and it gave me goosebumps.&rdquo;
               </p>
@@ -199,7 +217,10 @@ Image file: images/portfolio/guest-reviews.webp
               <p class="review-author">&mdash; Paw Paw MI</p>
             </div>
             <div class="review-card">
-              <p class="review-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</p>
+              <p class="review-stars">
+                <span aria-hidden="true">&#9733;&#9733;&#9733;&#9733;&#9733;</span>
+                <span class="visually-hidden">5 out of 5 stars</span>
+              </p>
               <p class="review-quote">
                 &ldquo;By far our favorite condo that we have stayed in.&rdquo;
               </p>
@@ -207,7 +228,10 @@ Image file: images/portfolio/guest-reviews.webp
               <p class="review-author">&mdash; Janet A.</p>
             </div>
             <div class="review-card">
-              <p class="review-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</p>
+              <p class="review-stars">
+                <span aria-hidden="true">&#9733;&#9733;&#9733;&#9733;&#9733;</span>
+                <span class="visually-hidden">5 out of 5 stars</span>
+              </p>
               <p class="review-quote">
                 &ldquo;Perfect beach condo &mdash; beautiful and calming without being overdone or
                 kitschy.&rdquo;
@@ -218,7 +242,10 @@ Image file: images/portfolio/guest-reviews.webp
               <p class="review-author">&mdash; Stacy A.</p>
             </div>
             <div class="review-card">
-              <p class="review-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</p>
+              <p class="review-stars">
+                <span aria-hidden="true">&#9733;&#9733;&#9733;&#9733;&#9733;</span>
+                <span class="visually-hidden">5 out of 5 stars</span>
+              </p>
               <p class="review-quote">&ldquo;Best one we have rented.&rdquo;</p>
               <p class="text-muted">
                 Property was as advertised and pictures were accurate. Whole experience was great
@@ -240,6 +267,7 @@ Image file: images/portfolio/guest-reviews.webp
         <a href="index.html#contact" class="button">Get in Touch</a>
       </div>
     </section>
+    </main>
 
     <footer class="site-footer">
       <div class="footer-brand">
@@ -247,7 +275,7 @@ Image file: images/portfolio/guest-reviews.webp
         <span>Going Coastal Refresh Co.</span>
       </div>
       <p class="footer-locations">Gulf Shores, Orange Beach, Fort Morgan, Alabama</p>
-      <p class="footer-copyright">&copy; 2026 Going Coastal Refresh Co. All rights reserved.</p>
+      <p class="footer-copyright">&copy; 2026 Going Coastal Refresh Co., LLC. All rights reserved.</p>
     </footer>
 
     <script src="js/main.js"></script>

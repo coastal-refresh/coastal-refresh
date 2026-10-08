@@ -12,6 +12,90 @@
    See the "TYPOGRAPHY" and "LAYOUT HELPERS" sections further down.
    ========================================================================== */
 
+/* ==========================================================================
+   SELF-HOSTED FONTS (assets/fonts/)
+
+   Fraunces (headings) and Inter (body text), both under the SIL Open Font
+   License (see assets/fonts/README.md). Served from this site instead of
+   Google Fonts so visitors' browsers don't contact Google.
+
+   The weight ranges below match the faces the site used when it loaded
+   these from Google (Fraunces 600-700 + 600 italic, Inter 400-700), so the
+   text renders exactly as before - e.g. body text asking for weight 300
+   still gets 400. The "latin-ext" files only download if a page actually
+   contains characters outside basic Latin (such as a Polish or Czech name
+   typed into the form).
+   ========================================================================== */
+
+@font-face {
+  font-family: "Fraunces";
+  font-style: normal;
+  font-weight: 600 700;
+  font-display: swap;
+  src: url("../assets/fonts/fraunces-latin-ext-wght-normal.woff2") format("woff2");
+  unicode-range:
+    U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329,
+    U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F,
+    U+A720-A7FF;
+}
+
+@font-face {
+  font-family: "Fraunces";
+  font-style: normal;
+  font-weight: 600 700;
+  font-display: swap;
+  src: url("../assets/fonts/fraunces-latin-wght-normal.woff2") format("woff2");
+  unicode-range:
+    U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329,
+    U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+  font-family: "Fraunces";
+  font-style: italic;
+  font-weight: 600;
+  font-display: swap;
+  src: url("../assets/fonts/fraunces-latin-ext-600-italic.woff2") format("woff2");
+  unicode-range:
+    U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329,
+    U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F,
+    U+A720-A7FF;
+}
+
+@font-face {
+  font-family: "Fraunces";
+  font-style: italic;
+  font-weight: 600;
+  font-display: swap;
+  src: url("../assets/fonts/fraunces-latin-600-italic.woff2") format("woff2");
+  unicode-range:
+    U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329,
+    U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+  font-family: "Inter";
+  font-style: normal;
+  font-weight: 400 700;
+  font-display: swap;
+  src: url("../assets/fonts/inter-latin-ext-wght-normal.woff2") format("woff2");
+  unicode-range:
+    U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329,
+    U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F,
+    U+A720-A7FF;
+}
+
+@font-face {
+  font-family: "Inter";
+  font-style: normal;
+  font-weight: 400 700;
+  font-display: swap;
+  src: url("../assets/fonts/inter-latin-wght-normal.woff2") format("woff2");
+  unicode-range:
+    U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329,
+    U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
 :root {
   /* Main brand color (teal). Used for buttons, links, icons and borders. */
   --color-primary: #2a5d67;
@@ -39,13 +123,20 @@
   /* Text color used on top of the dark/primary color buttons. */
   --color-text-on-primary: #f8f5f2;
 
+  /* Accessibility colors (WCAG 2.2 AA contrast against the cream page
+     background): form error text (6.1:1), the guest-review stars (3.4:1,
+     the minimum for graphics), and the outline of form fields (3.4:1). */
+  --color-error: #a8341a;
+  --color-star: #c46f22;
+  --color-input-border: #8a847c;
+
   /* Fonts. The client's live site uses two licensed fonts ("Ogg" for
      headings, "Neue Haas Grotesk" for body text). Those aren't available
-     as free web fonts, so this rebuild uses the closest free Google Fonts
-     match for each: "Fraunces" (an elegant, warm serif similar to Ogg) for
-     headings, and "Inter" (a clean, neutral sans-serif similar to Neue
-     Haas Grotesk/Helvetica) for body text. Loaded via <link> tags in each
-     page's <head>. */
+     as free web fonts, so this rebuild uses the closest free match for
+     each: "Fraunces" (an elegant, warm serif similar to Ogg) for headings,
+     and "Inter" (a clean, neutral sans-serif similar to Neue Haas
+     Grotesk/Helvetica) for body text. Both are self-hosted - see the
+     @font-face rules at the top of this file. */
   --font-heading: "Fraunces", Georgia, "Times New Roman", serif;
   --font-body: "Inter", "Helvetica Neue", Helvetica, Arial, sans-serif;
 
@@ -87,6 +178,80 @@ img {
 
 a {
   color: var(--color-primary);
+}
+
+/* Clearly visible keyboard focus on every interactive element. */
+:focus-visible {
+  outline: 3px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+.site-footer :focus-visible {
+  outline-color: var(--color-background);
+}
+
+/* Text for screen readers only. */
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* "Skip to main content": a floating pill parked above the top of the page
+   until it receives keyboard focus (the first Tab press), then it slides
+   down over the header. It stays focusable while hidden. */
+.skip-link {
+  position: fixed;
+  top: 0.75rem;
+  left: 50%;
+  z-index: 200;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6em;
+  max-width: calc(100vw - 2rem);
+  padding: 0.7em 1.25em 0.7em 1.4em;
+  border-radius: 999px;
+  background-color: var(--color-text);
+  color: var(--color-text-on-primary);
+  font-size: 0.95rem;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  text-decoration: none;
+  white-space: nowrap;
+  box-shadow: 0 10px 30px rgba(26, 46, 53, 0.28), 0 2px 6px rgba(26, 46, 53, 0.2);
+  opacity: 0;
+  transform: translate(-50%, calc(-100% - 1rem));
+  transition: transform 0.2s ease-out, opacity 0.15s ease-out;
+}
+
+/* Decorative down arrow (no text, so it isn't part of the link's name). */
+.skip-link::after {
+  content: "";
+  width: 1.1em;
+  height: 1.1em;
+  background-color: var(--color-accent-aqua);
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 5v14M6 13l6 6 6-6'/%3E%3C/svg%3E") center / contain no-repeat;
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 5v14M6 13l6 6 6-6'/%3E%3C/svg%3E") center / contain no-repeat;
+}
+
+.skip-link:focus {
+  opacity: 1;
+  transform: translate(-50%, 0);
+  /* Light ring just inside the dark pill: high contrast, never clipped. */
+  outline: 2px solid var(--color-accent-aqua);
+  outline-offset: -5px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .skip-link {
+    transition: none;
+  }
 }
 
 .container {
@@ -267,6 +432,21 @@ p {
 .hero-lede {
   font-size: 1.1rem;
   color: var(--color-text-muted);
+}
+
+/* Short factual disclosure lines (own properties, testimonial relationship,
+   review source). Same muted color as other secondary text, which clears the
+   4.5:1 contrast minimum on the page background. */
+.page-note {
+  max-width: 720px;
+  margin: 1rem auto 0;
+  text-align: center;
+  font-size: 0.95rem;
+  color: var(--color-text-muted);
+}
+
+.reviews-note {
+  margin-bottom: 1.5rem;
 }
 
 .hero-tagline {
@@ -587,7 +767,7 @@ section {
 }
 
 .review-stars {
-  color: var(--color-accent-sand);
+  color: var(--color-star);
   letter-spacing: 0.15em;
   font-size: 1.1rem;
   margin-bottom: 0.5em;
@@ -608,7 +788,8 @@ section {
 }
 
 @media (max-width: 720px) {
-  .reviews-image {
+  .reviews-image,
+  .reviews-note {
     display: none;
   }
 
@@ -674,10 +855,38 @@ section {
   padding: 0.7em 0.9em;
   font-family: var(--font-body);
   font-size: 1rem;
-  border: 1px solid var(--color-border);
+  border: 1px solid var(--color-input-border);
   border-radius: var(--radius);
   background-color: var(--color-background);
   color: var(--color-text);
+}
+
+.contact-form input[aria-invalid="true"],
+.contact-form textarea[aria-invalid="true"] {
+  border-color: var(--color-error);
+  border-width: 2px;
+}
+
+.form-required-note,
+.form-hint {
+  margin: 0;
+  font-size: 0.85rem;
+  color: var(--color-text-muted);
+}
+
+.form-hint {
+  margin-top: 0.35em;
+}
+
+/* Honeypot spam trap (see index.html): off-screen rather than display:none
+   so simple bots still see and fill it. It is also aria-hidden and has
+   tabindex=-1, so keyboard and screen-reader users never reach it. */
+.form-trap {
+  position: absolute;
+  left: -10000px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
 }
 
 .contact-form textarea {
@@ -695,8 +904,16 @@ section {
   margin: 0;
 }
 
+/* While empty, hide the message visually but keep it rendered: screen
+   readers only announce changes to a live region that already exists in
+   the accessibility tree, which display:none would prevent. Taking it out
+   of the layout (absolute) also avoids an extra grid gap. */
 .form-status:empty {
-  display: none;
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
 }
 
 .form-status-success {
@@ -704,7 +921,7 @@ section {
 }
 
 .form-status-error {
-  color: var(--color-accent-coral);
+  color: var(--color-error);
 }
 
 /* ==========================================================================
@@ -842,6 +1059,10 @@ section {
 }
 
 @media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
   .reveal-init {
     opacity: 1 !important;
     filter: none !important;

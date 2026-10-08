@@ -160,7 +160,7 @@ document.addEventListener("DOMContentLoaded", function () {
     showStatus(
       params.get("sent") === "1"
         ? "Thanks! Your message has been sent - we'll be in touch soon."
-        : "Something went wrong sending your message. Please email or call/text us directly.",
+        : "Something went wrong sending your message. Please check the form and try again, or email or call/text us directly.",
       params.get("sent") !== "1"
     );
     params.delete("sent");
@@ -172,15 +172,53 @@ document.addEventListener("DOMContentLoaded", function () {
     );
   }
 
+  var GENERIC_ERROR =
+    "Something went wrong sending your message. Please email or call/text us directly.";
+
+  // A field flagged as invalid by the server stays flagged until the visitor
+  // edits it.
+  function clearInvalid(field) {
+    field.removeAttribute("aria-invalid");
+    field.removeAttribute("aria-describedby");
+  }
+
+  Array.prototype.forEach.call(form.elements, function (field) {
+    field.addEventListener("input", function () {
+      if (field.getAttribute("aria-invalid")) {
+        clearInvalid(field);
+        // The textarea has its own hint that must stay described.
+        if (field.id === "message") {
+          field.setAttribute("aria-describedby", "message-hint");
+        }
+      }
+    });
+  });
+
+  // Marks the field the server complained about, ties the error message to it
+  // for screen readers, and moves focus there.
+  function flagField(name) {
+    var field = name && form.elements[name];
+    if (!field || !field.focus) {
+      return;
+    }
+    var describedBy = field.id === "message" ? "message-hint " : "";
+    field.setAttribute("aria-invalid", "true");
+    field.setAttribute("aria-describedby", describedBy + "form-status");
+    field.focus();
+  }
+
   form.addEventListener("submit", function (event) {
     event.preventDefault();
 
+    // The "website" field is a hidden spam trap (see index.html); it is
+    // sent along so the API can discard bot submissions.
     var data = {
       firstName: form.elements["firstName"].value,
       lastName: form.elements["lastName"].value,
       email: form.elements["email"].value,
       phone: form.elements["phone"].value,
       message: form.elements["message"].value,
+      website: form.elements["website"] ? form.elements["website"].value : "",
     };
 
     if (submitButton) {
@@ -194,17 +232,28 @@ document.addEventListener("DOMContentLoaded", function () {
       body: JSON.stringify(data),
     })
       .then(function (response) {
-        if (!response.ok) {
-          throw new Error("Request failed");
+        if (response.ok) {
+          showStatus("Thanks! Your message has been sent - we'll be in touch soon.", false);
+          form.reset();
+          return;
         }
-        showStatus("Thanks! Your message has been sent - we'll be in touch soon.", false);
-        form.reset();
+        // The API explains validation problems (4xx) in plain language;
+        // anything else (server/platform trouble) gets the generic message.
+        return response
+          .json()
+          .catch(function () {
+            return {};
+          })
+          .then(function (body) {
+            var isValidationError = response.status >= 400 && response.status < 500;
+            showStatus(isValidationError && body.error ? body.error : GENERIC_ERROR, true);
+            if (isValidationError) {
+              flagField(body.field);
+            }
+          });
       })
       .catch(function () {
-        showStatus(
-          "Something went wrong sending your message. Please email or call/text us directly.",
-          true
-        );
+        showStatus(GENERIC_ERROR, true);
       })
       .finally(function () {
         if (submitButton) {
