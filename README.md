@@ -2,21 +2,25 @@
 
 This is a plain HTML/CSS/JS rebuild of the client's existing Wix
 prototype at `https://goingcoastalrefresh.com/`. It has no build step,
-no framework, and no dependency on Wix — it can be opened directly in a
-browser, hosted on GitHub Pages, or uploaded to any standard web host.
+no framework, and no dependency on Wix. The pages can be opened directly in a
+browser, but the contact form needs the Azure Static Web Apps managed API in
+`api/`; on a plain static host (including GitHub Pages) the form cannot send
+and the site's security headers and URL blocks in `staticwebapp.config.json`
+are not applied.
 
 ## How the site is organized
 
 ```
 index.html       Home page (hero, services, intro, about, testimonial, contact)
-portfolio.html   Featured projects, before/after highlights, and full photo gallery
-services.html    Service pricing/details (formerly the Wix "Book Online" page)
+portfolio.html   Project flyers (before/after graphics) and the guest-review graphic
+services.html    The three service cards (formerly the Wix "Book Online" page)
 css/styles.css   All styling and the color/typography variables
 js/main.js       Mobile menu, scroll-reveal animations, and contact form submit handling
 api/             Azure Functions API (contact form → email via SendGrid) and its tests
 assets/fonts/    Self-hosted Fraunces and Inter font files + their license notices
 docs/            Privacy/data-flow notes, accessibility review, Azure configuration notes
-staticwebapp.config.json   Azure Static Web Apps settings (currently just hides /docs)
+staticwebapp.config.json   Azure Static Web Apps settings: security headers (incl. CSP),
+                           blocked internal paths, API runtime
 images/          All site images, organized by type (see below)
 ```
 
@@ -41,9 +45,9 @@ images/
 - **Images**: replace a file in `images/` while keeping the same
   filename, and the site updates automatically. Or change the `src="..."`
   path in the HTML to point at a new filename.
-- **Adding/removing a photo from the gallery**: in `portfolio.html`,
-  copy or delete one `<figure><img ...></figure>` line inside the
-  `#gallery` section.
+- **Adding/removing a project on the portfolio page**: in `portfolio.html`,
+  copy or delete one `<div class="flyer-group">` block inside the
+  `#portfolio` section (the comment above it explains the layout).
 
 No installation, build tools, or command line are required to edit
 content — a text editor (or GitHub's own web editor) is enough.
@@ -58,11 +62,11 @@ exactly as-is:
 - **Live booking calendar removed.** The original "Book Online" page
   used Wix Bookings, a server-side scheduling system. A static site has
   no server, so each service's "Book Now" button has been replaced with
-  a "Request This Service" button that goes to the contact form. The
+  a "Request a Free Quote" button that goes to the contact form. The
   page was renamed **Services** in the navigation (the Wix site itself
   already labeled this nav link "Services", even though the page URL
-  was `/book-online`), and pricing/duration details are shown as plain
-  text instead of inside a live booking widget.
+  was `/book-online`). No prices are listed; the services page says
+  pricing depends on the space and scope of each project.
 - **Contact form posts to an Azure Functions API.** The Home page form
   submits to `/api/submit-inquiry` (see `api/src/functions/submitInquiry.js`),
   a managed Function that emails the submission via SendGrid. It works
@@ -72,9 +76,9 @@ exactly as-is:
   for how to configure it.
 - **Two Wix pages merged into one.** Wix generated separate `/portfolio`
   and `/portfolio-gallery` pages that were both about the same project
-  photos. These were combined into a single `portfolio.html` with clear
-  sections ("Featured Projects," "Before & After Highlights," and
-  "Photo Gallery") so there's one page to maintain instead of two.
+  photos. These were combined into a single `portfolio.html` ("Recent
+  Transformations" project flyers, plus the guest-review graphic) so
+  there's one page to maintain instead of two.
 - **Fonts.** The client's live site actually renders with two licensed
   fonts ("Ogg" for headings, "Neue Haas Grotesk" for body text), not the
   Madefor/Helvetica fallback that shows up in Wix's own CSS. Since Ogg and
@@ -92,13 +96,12 @@ exactly as-is:
 - **Several sections of the original site were designed as one large
   image** (with the headline and body text baked into the picture) —
   for example the "Meet Dave & Donna, and Penny" About section, the
-  intro pitch graphic, and the Realtor testimonial. Where the content
-  was important for the client to be able to edit later (the About
-  story), the text was transcribed into real, editable HTML in addition
-  to keeping the original graphic. Purely decorative or third-party
-  branded graphics (the testimonial, the before/after marketing cards)
-  were kept as images only, matching how the client already presented
-  them.
+  intro pitch graphic, the project flyers and the Realtor testimonial.
+  These are shown as images only (the About story and intro graphic have
+  no HTML text copy; the testimonial and guest reviews have a plain-text
+  version that is shown on narrow phone screens). Text inside images is
+  not searchable or editable here and is only partly described by the
+  images' alt text, so edit the original design files, not this repo.
 - **All images are WebP.** The client's designed graphics were originally
   large PNG/JPG exports (1–3 MB each, since they're screenshots
   containing photos and text). They've been converted to WebP (lossless
@@ -106,14 +109,19 @@ exactly as-is:
   flyers/graphics) for roughly a 90% size reduction with no visible
   quality loss — see git history for the one-off conversion script used.
 
-Nothing was invented: all service descriptions, pricing, the business
-story, the Realtor testimonial, and contact information are copied
-directly from the live Wix site.
+The service descriptions, business story, Realtor testimonial, guest
+reviews and contact information were carried over from the client's Wix
+prototype and design files. Their accuracy, and the client's right to
+publish the photos, names and reviews they contain, have not been verified
+by the developers; see the owner checklist kept with the compliance audit.
 
 ## Hosting
 
 This project is deployed on **Azure Static Web Apps**, built straight
-from this GitHub repo (`main` branch) with no build step. In the Azure
+from this GitHub repo (`main` branch) with no build step. The pull-request
+previews and the production site are both built by the workflow in
+`.github/workflows/`; the repository root is the app folder, so anything in
+the repo that is not blocked in `staticwebapp.config.json` is published. In the Azure
 portal's "Build Details" when creating the resource: Build Preset
 `Custom`, App location `/`, **Api location `api`** (see below), Output
 location left blank. The client's domain (`goingcoastalrefresh.com`)

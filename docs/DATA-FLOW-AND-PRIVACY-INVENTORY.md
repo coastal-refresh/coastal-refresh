@@ -107,7 +107,7 @@ cannot be seen from the repository — see section 6.
 | Azure platform logs / Application Insights | At minimum request metadata (URL path, status, timing, client IP) **if** Application Insights is enabled on the Static Web App. Managed functions only produce logs when it is enabled. | **Unknown** — `api/host.json` has App Insights sampling settings but the connection is configured in the Azure portal, not the repo. Check *Static Web App → Monitoring → Application Insights* and its retention. |
 | Twilio SendGrid | Delivery processing; its activity/event history may keep the recipient address and the **subject line (which contains the visitor's name)** for a plan-dependent period. | **Unknown** — confirm in the SendGrid account (Email Activity retention, any Event Webhook, suppression lists). Not verifiable from code. |
 | Google-hosted mailbox | Every inquiry, until deleted | The owner's mailbox settings, filters and deletion practice decide this. **Unknown** — owner to state. |
-| GitHub | Source code only — never submissions | Verified |
+| GitHub | Source code only — never submissions. **The repository is public** (checked 2026-10-08), so `docs/` is readable there, and a GitHub Pages copy of the site was enabled from a feature branch (see `AZURE-CONFIGURATION.md` §2b). | Verified |
 
 ## 7. Items the business owner needs to decide or confirm
 

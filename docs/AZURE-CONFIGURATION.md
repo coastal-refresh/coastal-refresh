@@ -21,23 +21,26 @@ Files added that affect deployment (the GitHub Actions workflow is unchanged):
 - `api/package-lock.json` — pins the two direct dependencies and their 32
   transitive packages (all from `registry.npmjs.org`) so deploys are
   repeatable. Currently `@azure/functions` 4.16.5, `@sendgrid/mail` 8.1.6.
-- `staticwebapp.config.json` — only blocks the public URL `/docs/*` (this
-  repository's internal notes would otherwise be published, because the
-  workflow deploys the whole repo root). Remove the file if undesired; nothing
-  else depends on it.
+- `staticwebapp.config.json` — blocks the public URLs `/docs/*` and
+  `/README.md` (internal notes that would otherwise be published, because the
+  workflow deploys the whole repo root), adds security headers (section 2a),
+  maps `.woff2` to `font/woff2`, and pins the API runtime to `node:22`
+  (section 2, item 1). Nothing else depends on it, but see section 2a before
+  removing the headers.
 - `assets/fonts/` — the self-hosted font files (about 250 KB, well inside the
   Static Web Apps limits).
 
 ## 2. Recommended, needs your approval
 
-1. **Pin the API runtime.** The repo does not set `platform.apiRuntime`, so the
-   managed Functions app runs on whatever Static Web Apps defaults to — which
-   this review could not determine from the docs or repo. Node.js 18 reached end
-   of support on 2025-05-31. The code works on Node 18, 20 and 22 (tests ran on
-   22). Recommended: add to `staticwebapp.config.json`
-   `"platform": { "apiRuntime": "node:20" }` (or `node:22`), then run the
-   deployment checks below. It was not done automatically because it changes
-   the production runtime.
+1. **API runtime (now pinned).** Earlier the repo did not set
+   `platform.apiRuntime` and the default was unknown. The deploy log of the
+   2026-08-24 production run (GitHub Actions run 32679075935, Oryx build)
+   reports `Functions Runtime: ~4, node version: 22` (Node 22.22.0), so the
+   default was already Node 22; `staticwebapp.config.json` now pins
+   `"apiRuntime": "node:22"` to match, so a future change of the platform
+   default cannot silently move the API. Both `node:20` and `node:22` are listed
+   as supported by Microsoft (Node 18 ended 2025-05-31). Verify after the next
+   deploy that the contact form still works (checklist item 1 below).
 2. **Enable Application Insights on the Static Web App** (Monitoring) if it is
    not already on, with a short retention period. Managed functions have **no
    logs at all** without it, so the sanitized failure lines would otherwise be
@@ -45,6 +48,52 @@ Files added that affect deployment (the GitHub Actions workflow is unchanged):
    Monitor pricing and ingestion allowance first; this is a cost decision for
    the owner. Then add an alert on `SendGrid send failed` traces.
 3. **Rate limiting** — see section 4.
+
+## 2a. Security headers and Content-Security-Policy
+
+Observed on the deployed Azure site on 2026-10-08 (the 2026-08-24 build of
+`main`; platform defaults only): HTTP redirects to HTTPS (301),
+`Strict-Transport-Security: max-age=10886400; includeSubDomains; preload`,
+`Referrer-Policy: same-origin`, `X-Content-Type-Options: nosniff`. There was no
+Content-Security-Policy, `Permissions-Policy` or framing protection.
+
+`staticwebapp.config.json` now adds, via `globalHeaders` (applied to static
+files only — Microsoft documents that global headers do not affect API
+responses):
+
+| Header | Value | Why |
+| --- | --- | --- |
+| `Content-Security-Policy` | `default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; font-src 'self'; connect-src 'self'; form-action 'self'; base-uri 'self'; object-src 'none'; frame-ancestors 'none'` | The site loads only its own scripts, styles, fonts and images (`data:` is used by one decorative icon in the stylesheet). Blocks injected third-party code and framing. No `unsafe-inline`. |
+| `X-Frame-Options` | `DENY` | Same framing protection for browsers that ignore CSP `frame-ancestors`. |
+| `Permissions-Policy` | camera, microphone, geolocation, payment, usb, motion sensors all off | The site uses none of these features. |
+
+Verified in headless Chrome with these exact headers applied: all three pages at
+1280 px and 390 px load with 0 CSP violations, 0 requests to other origins, no
+console errors, self-hosted fonts loaded, the mobile menu works, and the form
+works both through `fetch` and as a no-JavaScript POST with its 303 redirect
+(`form-action 'self'` permits it). Automated checks in `api/test/site.test.js`
+fail if inline script/style, a third-party origin, a tracker or browser storage
+is later added. **If a future feature needs an outside resource (map, video,
+analytics), the CSP must be widened deliberately** — that is the intended
+behaviour, and a privacy-policy change would be needed as well.
+
+A CSP is defence in depth, not a substitute for the input handling in
+`api/src/inquiry.js`. The emulation above cannot prove how Azure itself
+serves the headers; check them after deploy (section 6, item 12).
+
+## 2b. Other public copies of the site
+
+- **GitHub Pages** was found enabled on 2026-10-08 with source branch
+  `feature/privacy-security-hardening`, publishing the repo root at
+  `https://coastal-refresh.github.io/coastal-refresh/`. That copy ignores
+  `staticwebapp.config.json`, so none of the headers or blocks above apply
+  there; `/docs/*`, `/README.md` and `/api/src/inquiry.js` are readable, and the
+  contact form cannot work (there is no API on Pages: `/api/submit-inquiry`
+  returns 404). It also duplicates the public site under another URL. Decide
+  whether it is meant to exist; if not, disable it (Repo settings → Pages).
+- **The GitHub repository is public**, so everything committed — including
+  `docs/` — is readable on GitHub regardless of the Azure route rules. Do not
+  commit owner-sensitive audit notes, credentials or customer data to it.
 
 ## 3. Request-body size limit — what is and is not enforced
 
@@ -159,6 +208,13 @@ rejected before SendGrid); only step 1 does, and it is intended to.
 10. **Docs not public**: `$SITE/docs/PRIVACY-POLICY-DRAFT.md` returns 404.
 11. **Desktop and phone**: load all three pages, open the mobile menu, submit
     the form from a phone.
+12. **Headers** (browser dev tools → Network → the page → Response headers, or
+    `curl -sI $SITE/`): `Content-Security-Policy`, `X-Frame-Options` and
+    `Permissions-Policy` are present alongside the platform's HSTS; the console
+    shows no "Refused to load…" CSP messages on any page or during a form
+    submission.
+13. **Internal files**: `$SITE/README.md` returns 404 (it returned 200 on the
+    2026-08-24 build).
 
 ## 7. Compatibility notes
 

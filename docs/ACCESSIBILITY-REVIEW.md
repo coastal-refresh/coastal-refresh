@@ -27,6 +27,16 @@ accessibility problems. The manual checks at the bottom are still required.
 | Portfolio | `landmark-one-main`, `region` (4) | no violations |
 | Services | `heading-order`, `landmark-one-main`, `region` (3) | no violations |
 
+**Re-run 2026-10-08** (axe-core, tags wcag2a/2aa/21a/21aa/22aa + best-practice,
+Chrome, all three pages at 1280 px and 390 px, with the new security headers
+applied, after waiting for the scroll-reveal fade-ins to finish): **0 violations
+on all six page/width combinations.** axe left two items "needs review" at
+390 px only, both on the hamburger button (its visible label is the ☰ glyph and
+its accessible name is "Toggle menu"); that is an icon-only button, which is
+acceptable, but confirm by hand. Note for anyone re-running axe: scanning while
+the fade-in animations are mid-way produces false colour-contrast failures; wait
+about two seconds or emulate `prefers-reduced-motion`.
+
 axe only reports on what is visible when it runs (for example it cannot see the
 error message colour until an error is shown), so the contrast items below were
 also computed by hand.
@@ -84,11 +94,20 @@ page against the original showed identical output apart from the star colour
    at 320px; at 256px (500% zoom) there is some horizontal overflow, which is
    beyond the 320px WCAG requires but worth a look.
 4. **Text-spacing override** (WCAG 1.4.12) with a bookmarklet/extension.
-5. **Images of text** (1.4.5): the intro, "Meet Dave & Donna", testimonial,
-   portfolio flyers and guest-reviews graphics are client-designed pictures
-   with text baked in. Their `alt` text reproduces the content, but a long-term
-   improvement is real HTML text (the mobile testimonial and review cards
-   already are). Decide with the owner whether that is wanted.
+5. **Images of text** (1.4.5, and 1.1.1): the intro, "Meet Dave & Donna",
+   testimonial, portfolio flyers and guest-reviews graphics are client-designed
+   pictures with text baked in. Correction to an earlier version of this note:
+   their `alt` text does **not** fully reproduce that text. The "Meet Dave &
+   Donna" alt carries only its opening sentences (the "Since 2019…", "Hands-on.
+   Experienced. Results that matter.", "From our properties to yours" and "Penny's
+   Promise" copy is not available as text); the desktop testimonial alt carries
+   one quote; the project flyers' alt text is a summary of the before/after
+   steps. Screen-reader, text-resize and translation users therefore get less
+   than sighted users, and the claims inside the images are not searchable.
+   Long-term fix: real HTML text for the About story and testimonial (the mobile
+   testimonial and review cards already are). Because that text contains
+   business claims, wording must be approved by the owners (see the compliance
+   audit). Decide with the owner whether that is wanted.
 6. **Current-page indicator** in the nav is shown by colour (plus
    `aria-current="page"` for assistive tech). Consider an underline so it does
    not rely on colour alone (1.4.1).
