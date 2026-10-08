@@ -146,3 +146,10 @@ test("owner-approved disclosures are present on the pages that need them", () =>
     )
   );
 });
+
+test("footer names the registered entity on every page", () => {
+  for (const page of PAGES) {
+    const html = read(page).replace(/<!--[\s\S]*?-->/g, "");
+    assert.match(html, /&copy; 2026 Going Coastal Refresh Co\., LLC\. All rights reserved\./, page);
+  }
+});
