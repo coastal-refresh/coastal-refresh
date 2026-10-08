@@ -156,3 +156,16 @@ test("footer names the registered entity on every page", () => {
     assert.match(html, /&copy; 2026 Going Coastal Refresh Co\., LLC\. All rights reserved\./, page);
   }
 });
+
+test("guest-review graphic has a screen-reader text equivalent that is never display:none", () => {
+  const html = read("portfolio.html").replace(/<!--[\s\S]*?-->/g, "");
+  const css = read("css/styles.css");
+  assert.match(html, /<figure class="reviews-figure" aria-hidden="true">/, "picture hidden from AT because the text exists");
+  const cards = html.slice(html.indexOf('class="reviews-cards"'));
+  for (const who of ["Dianna O.", "Chris C.", "Paw Paw MI", "Janet A.", "Stacy A.", "Casey W."]) {
+    assert.ok(cards.includes(who), `review text for ${who} is in the page as real text`);
+  }
+  const rule = css.match(/\.reviews-cards\s*\{[^}]*\}/)[0];
+  assert.doesNotMatch(rule, /display\s*:\s*none/, "text must stay in the accessibility tree on wide screens");
+  assert.match(rule, /clip-path/);
+});

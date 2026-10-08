@@ -104,6 +104,13 @@ page against the original showed identical output apart from the star colour
    one quote; the project flyers' alt text is a summary of the before/after
    steps. Screen-reader, text-resize and translation users therefore get less
    than sighted users, and the claims inside the images are not searchable.
+   **Guest reviews: fixed.** The six reviews exist as real text (the cards used on
+   phones) and are now kept in the page on wide screens too, hidden visually only,
+   while the picture is hidden from assistive technology so nothing is read twice.
+   Checked in Chrome's accessibility tree: the review text, a heading and the
+   source label are exposed once each. The text and the picture must be edited
+   together. The About story, intro graphic, testimonial and project flyers
+   remain image-only on wide screens.
    Long-term fix: real HTML text for the About story and testimonial (the mobile
    testimonial and review cards already are). Because that text contains
    business claims, wording must be approved by the owners (see the compliance
