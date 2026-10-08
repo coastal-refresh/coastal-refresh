@@ -1,0 +1,8 @@
+{
+  "routes": [
+    {
+      "route": "/docs/*",
+      "statusCode": 404
+    }
+  ]
+}

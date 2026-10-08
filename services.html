@@ -6,20 +6,18 @@
 <title>Services | Going Coastal Refresh Co.</title>
 <meta name="description" content="Property Makeover, Rental-Ready Improvements and Custom Storage Beds from Going Coastal Refresh Co. in Gulf Shores, Orange Beach and Fort Morgan, Alabama.">
 <link rel="icon" type="image/webp" href="images/branding/favicon.webp">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,600;0,700;1,600&family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
 
+<a class="skip-link" href="#main">Skip to main content</a>
 <header class="site-header">
   <div class="container">
     <a href="index.html" class="site-logo">
-      <img src="images/branding/logo.webp" alt="Going Coastal Refresh Co. logo">
+      <img src="images/branding/logo.webp" alt="Going Coastal Refresh Co. home">
     </a>
-    <button class="nav-toggle" aria-label="Toggle menu" aria-expanded="false">&#9776;</button>
-    <nav class="main-nav">
+    <button type="button" class="nav-toggle" aria-label="Toggle menu" aria-expanded="false" aria-controls="site-nav">&#9776;</button>
+    <nav class="main-nav" id="site-nav" aria-label="Main">
       <ul>
         <li><a href="index.html">Home</a></li>
         <li><a href="portfolio.html">Portfolio</a></li>
@@ -30,6 +28,7 @@
   </div>
 </header>
 
+<main id="main">
 <section class="hero">
   <div class="container">
     <h1>Services</h1>
@@ -54,6 +53,7 @@ See the project README for more on this and other simplified features.
 
 <section id="service-list">
   <div class="container">
+    <h2 class="visually-hidden">Our Services</h2>
     <div class="services-grid">
 
       <!-- Image file: images/services/property-makeover.jpg -->
@@ -91,6 +91,7 @@ See the project README for more on this and other simplified features.
     <a href="index.html#contact" class="button">Contact Us</a>
   </div>
 </section>
+</main>
 
 <footer class="site-footer">
   <div class="footer-brand">

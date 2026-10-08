@@ -4,3 +4,7 @@ Thumbs.db
 # Azure Functions API (local dev secrets and dependencies)
 api/local.settings.json
 api/node_modules/
+
+# Local environment files (never commit credentials)
+.env
+.env.*

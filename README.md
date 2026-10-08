@@ -13,7 +13,10 @@ portfolio.html   Featured projects, before/after highlights, and full photo gall
 services.html    Service pricing/details (formerly the Wix "Book Online" page)
 css/styles.css   All styling and the color/typography variables
 js/main.js       Mobile menu, scroll-reveal animations, and contact form submit handling
-api/             Azure Functions API (contact form → email via SendGrid)
+api/             Azure Functions API (contact form → email via SendGrid) and its tests
+assets/fonts/    Self-hosted Fraunces and Inter font files + their license notices
+docs/            Privacy/data-flow notes, accessibility review, Azure configuration notes
+staticwebapp.config.json   Azure Static Web Apps settings (currently just hides /docs)
 images/          All site images, organized by type (see below)
 ```
 
@@ -79,8 +82,10 @@ exactly as-is:
   the closest free Google Fonts match for each instead: "Fraunces" (an
   elegant serif similar to Ogg) for headings, and "Inter" (a clean,
   neutral sans-serif similar to Neue Haas Grotesk) for body text. Both are
-  loaded via a `<link>` tag in each page's `<head>` and set in
-  `css/styles.css`'s `--font-heading` / `--font-body` variables.
+  self-hosted from `assets/fonts/` (declared with `@font-face` at the top of
+  `css/styles.css`, with their SIL Open Font License notices alongside), so
+  visitors' browsers never contact Google. They are set in `css/styles.css`'s
+  `--font-heading` / `--font-body` variables.
 - **Colors** were reconstructed from the Wix theme's own CSS color
   variables (found in the site's page source), not re-guessed from
   scratch — see `css/styles.css` for the exact values.
@@ -136,6 +141,35 @@ The contact form's `/api/submit-inquiry` endpoint (an Azure Functions
      `goingcoastalrefresh@gmail.com` if not set)
 4. Push to `main` — the GitHub Actions workflow Azure created rebuilds
    and redeploys both the site and the API automatically.
+
+### What the form endpoint enforces
+
+`api/src/inquiry.js` holds the logic (`api/src/functions/submitInquiry.js` only
+registers it with Azure). It accepts `application/json` (what `js/main.js`
+sends) and `application/x-www-form-urlencoded` (the no-JavaScript fallback);
+anything else gets 415. Requests over 64 KiB get 413, malformed or non-object
+JSON gets 400, and fields must be strings. Values that are too long are
+rejected with a message, never silently cut: names 80 characters, email 254,
+message 3,000 — keep those in step with the `maxlength` attributes in
+`index.html`. A hidden `website` field is a spam trap: if it's filled in, the
+API pretends success and sends nothing. Notification emails are plain text with
+SendGrid open/click tracking switched off, and the logs never contain what the
+visitor typed. See `docs/AZURE-CONFIGURATION.md` for the request-size and
+rate-limiting limits of this setup.
+
+**Tests:** `cd api && npm install && npm test` (Node's built-in test runner;
+SendGrid is mocked, so no email is ever sent).
+
+### Documentation
+
+- `docs/DATA-FLOW-AND-PRIVACY-INVENTORY.md` — what is collected, where it goes,
+  what is and isn't known about retention
+- `docs/PRIVACY-POLICY-DRAFT.md` — **draft** policy with `[CONFIRM]` markers for
+  the business owner (not for publishing as is)
+- `docs/ACCESSIBILITY-REVIEW.md` — WCAG 2.2 AA review, fixes, manual checks
+- `docs/AZURE-CONFIGURATION.md` — settings, limitations, deployment checklist
+
+### Local testing
 
 For local testing, copy `api/local.settings.json.example` to
 `api/local.settings.json` (already gitignored) and fill in real values,
