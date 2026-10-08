@@ -203,28 +203,55 @@ a {
   border: 0;
 }
 
-/* "Skip to main content" banner: parked just above the top of the page
-   until it receives keyboard focus (the first Tab press), when it appears
-   as a full-width bar over the header. */
+/* "Skip to main content": a floating pill parked above the top of the page
+   until it receives keyboard focus (the first Tab press), then it slides
+   down over the header. It stays focusable while hidden. */
 .skip-link {
   position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
+  top: 0.75rem;
+  left: 50%;
   z-index: 200;
-  padding: 1em 1.5rem;
-  background-color: var(--color-primary);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6em;
+  max-width: calc(100vw - 2rem);
+  padding: 0.7em 1.25em 0.7em 1.4em;
+  border-radius: 999px;
+  background-color: var(--color-text);
   color: var(--color-text-on-primary);
-  font-weight: 700;
-  text-align: center;
-  transform: translateY(-100%);
+  font-size: 0.95rem;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  text-decoration: none;
+  white-space: nowrap;
+  box-shadow: 0 10px 30px rgba(26, 46, 53, 0.28), 0 2px 6px rgba(26, 46, 53, 0.2);
+  opacity: 0;
+  transform: translate(-50%, calc(-100% - 1rem));
+  transition: transform 0.2s ease-out, opacity 0.15s ease-out;
+}
+
+/* Decorative down arrow (no text, so it isn't part of the link's name). */
+.skip-link::after {
+  content: "";
+  width: 1.1em;
+  height: 1.1em;
+  background-color: var(--color-accent-aqua);
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 5v14M6 13l6 6 6-6'/%3E%3C/svg%3E") center / contain no-repeat;
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 5v14M6 13l6 6 6-6'/%3E%3C/svg%3E") center / contain no-repeat;
 }
 
 .skip-link:focus {
-  transform: none;
-  /* The default focus ring (teal) would vanish against the teal bar. */
-  outline: 3px solid var(--color-background);
-  outline-offset: -6px;
+  opacity: 1;
+  transform: translate(-50%, 0);
+  /* Light ring just inside the dark pill: high contrast, never clipped. */
+  outline: 2px solid var(--color-accent-aqua);
+  outline-offset: -5px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .skip-link {
+    transition: none;
+  }
 }
 
 .container {
