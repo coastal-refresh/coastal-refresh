@@ -164,7 +164,7 @@ test("extra fields are ignored and never emailed", async () => {
 });
 
 test("a message up to the limit is accepted without truncation", async () => {
-  const message = "a".repeat(3000);
+  const message = "a".repeat(2000);
   const res = await run(post({ ...VALID, message }));
   assert.equal(res.status, 200);
   assert.ok(sent[0].text.endsWith(message));
@@ -256,7 +256,7 @@ test("overlong values are rejected, not truncated", async () => {
     ["firstName", "a".repeat(81), /80 characters/],
     ["lastName", "b".repeat(81), /80 characters/],
     ["email", `${"a".repeat(60)}@${"b".repeat(190)}.com`, /254 characters/],
-    ["message", "m".repeat(3001), /3,000 characters/],
+    ["message", "m".repeat(2001), /2,000 characters/],
   ];
   for (const [field, value, pattern] of cases) {
     const res = await run(post({ ...VALID, [field]: value }));

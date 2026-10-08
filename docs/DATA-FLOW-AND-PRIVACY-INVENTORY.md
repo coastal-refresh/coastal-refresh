@@ -14,7 +14,7 @@ Last reviewed against the code on 2026-10-08.
 | First name, last name | Yes | Up to 80 characters each |
 | Email address | Yes | Up to 254 characters; used as the Reply-To of the notification |
 | Phone number | No | US 10-digit; normalized to `+1 XXX-XXX-XXXX` |
-| Message | Yes | Up to 3,000 characters; whatever the visitor chooses to write |
+| Message | Yes | Up to 2,000 characters; whatever the visitor chooses to write |
 | (hidden spam-trap field) | — | Real visitors never fill it; contents are not stored or emailed |
 
 **Purpose:** to let Going Coastal Refresh Co. receive and answer a visitor's

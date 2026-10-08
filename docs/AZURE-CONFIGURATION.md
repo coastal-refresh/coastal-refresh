@@ -144,7 +144,7 @@ rejected before SendGrid); only step 1 does, and it is intended to.
    `curl -i -X POST $SITE/api/submit-inquiry -H 'Content-Type: text/plain' -d 'x'`
 5. **Oversized** → 413:
    `head -c 100000 /dev/zero | tr '\0' 'a' | curl -i -X POST $SITE/api/submit-inquiry -H 'Content-Type: application/json' --data-binary @-`
-6. **Over-long message** → 400 naming the 3,000-character limit.
+6. **Over-long message** → 400 naming the 2,000-character limit.
 7. **Logs** (only if Application Insights is on): run a Log Analytics query over
    `traces` for the last day and confirm no names, emails, phone numbers or
    message text appear; only lines like `SendGrid send failed: category=…`.

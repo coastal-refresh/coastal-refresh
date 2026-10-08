@@ -3,7 +3,7 @@
 const sgMail = require("@sendgrid/mail");
 
 // Overall cap on the request body. A real submission is a few KB at most
-// (message limit below is 3,000 chars); anything near this size is not a
+// (message limit below is 2,000 chars); anything near this size is not a
 // contact-form submission.
 const MAX_BODY_BYTES = 64 * 1024;
 
@@ -17,7 +17,7 @@ const MAX_LENGTHS = {
   firstName: 80,
   lastName: 80,
   email: 254,
-  message: 3000,
+  message: 2000,
 };
 // Raw phone input is only bounded so the digit-stripping below has a sane
 // ceiling; the form itself caps this field at 12 characters.

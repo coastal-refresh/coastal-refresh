@@ -150,7 +150,7 @@ sends) and `application/x-www-form-urlencoded` (the no-JavaScript fallback);
 anything else gets 415. Requests over 64 KiB get 413, malformed or non-object
 JSON gets 400, and fields must be strings. Values that are too long are
 rejected with a message, never silently cut: names 80 characters, email 254,
-message 3,000 — keep those in step with the `maxlength` attributes in
+message 2,000 — keep those in step with the `maxlength` attributes in
 `index.html`. A hidden `website` field is a spam trap: if it's filled in, the
 API pretends success and sends nothing. Notification emails are plain text with
 SendGrid open/click tracking switched off, and the logs never contain what the

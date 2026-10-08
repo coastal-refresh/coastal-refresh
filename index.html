@@ -271,7 +271,7 @@ action/method are a working fallback for visitors without JavaScript.
             </p>
           </div>
           <!--
-          Field limits here (name 80, email 254, message 3000) must match
+          Field limits here (name 80, email 254, message 2000) must match
           MAX_LENGTHS in api/src/inquiry.js, which rejects anything longer.
           The name pattern matches NAME_PATTERN there: any Unicode letter plus
           spaces, hyphens, apostrophes and periods.
@@ -337,11 +337,11 @@ action/method are a working fallback for visitors without JavaScript.
               <textarea
                 id="message"
                 name="message"
-                maxlength="3000"
+                maxlength="2000"
                 aria-describedby="message-hint"
                 required
               ></textarea>
-              <p class="form-hint" id="message-hint">Up to 3,000 characters.</p>
+              <p class="form-hint" id="message-hint">Up to 2,000 characters.</p>
             </div>
             <!--
             Spam trap: people never see or tab to this field, so only bots
