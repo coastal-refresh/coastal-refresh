@@ -203,21 +203,28 @@ a {
   border: 0;
 }
 
-/* "Skip to main content" link: off-screen until it receives keyboard focus. */
+/* "Skip to main content" banner: parked just above the top of the page
+   until it receives keyboard focus (the first Tab press), when it appears
+   as a full-width bar over the header. */
 .skip-link {
-  position: absolute;
-  left: 0.5rem;
-  top: -4rem;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
   z-index: 200;
-  padding: 0.6em 1em;
+  padding: 1em 1.5rem;
   background-color: var(--color-primary);
   color: var(--color-text-on-primary);
-  border-radius: var(--radius);
   font-weight: 700;
+  text-align: center;
+  transform: translateY(-100%);
 }
 
 .skip-link:focus {
-  top: 0.5rem;
+  transform: none;
+  /* The default focus ring (teal) would vanish against the teal bar. */
+  outline: 3px solid var(--color-background);
+  outline-offset: -6px;
 }
 
 .container {
